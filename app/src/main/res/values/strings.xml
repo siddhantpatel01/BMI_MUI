@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BMI_MUI</string>
+    <string name="over_weight">Health Status:-Your are Over Weight</string>
+    <string name="under_weight">Health Status:- You are Under Weight</string>
+    <string name="Healthy">Health Status :- You are Healthy</string>
+    <string name="Suffering_from_Obesity">Health Status :- Suffering from Obesity</string>
+
+</resources>
