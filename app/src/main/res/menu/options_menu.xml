@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item1"
+        android:id="@+id/about_developer"
         android:title="About Developer"
-
         />
     <item
-        android:id="@+id/item2"
+        android:id="@+id/about_bmi"
+        android:title="What is BMI ? *"
+        />
+    <item
+        android:id="@+id/bmi_chart"
         android:title="BMI Chart"
-
         />
     <item
-        android:id="@+id/item3"
-        android:title="Exit"
+        android:id="@+id/contact_us"
+        android:title="Contacts Us*"
+        >
+        <menu>
+            <item
+                android:id="@+id/dial"
+                android:title="Dial"
+                />
+            <item
+                android:id="@+id/Call"
+                android:title="Call"
+                />
+            <item
+                android:id="@+id/email"
+                android:title="Email"
 
+                />
+        </menu>
+
+
+    </item>
+    <item
+        android:id="@+id/exit_app"
+        android:title="Exit"
         />
 </menu>

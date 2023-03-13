@@ -1,12 +1,18 @@
 package com.example.bmi_mui
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import com.example.bmi_mui.databinding.ActivityMainBinding
 import kotlin.math.roundToInt
@@ -31,40 +37,77 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
         override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.options_menu,menu)
-        MenuCompat.setGroupDividerEnabled(menu!!, true);//add horizontal divider
+            menuInflater.inflate(R.menu.options_menu, menu)
+            MenuCompat.setGroupDividerEnabled(menu!!, true);//add horizontal divider
+            return super.onCreateOptionsMenu(menu)
 
-        return super.onCreateOptionsMenu(menu)
-    }
+        }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.item1 ->{
+            R.id.about_developer ->{
 
                 val intent = Intent(this,Aboutdeveloper::class.java)
-
                 startActivity(intent)
 //                Toast.makeText(this,"About BMI", Toast.LENGTH_SHORT).show()
                 return true
             }
-            R.id.item2 ->{
-
+            R.id.bmi_chart ->{
                 val intent = Intent(this, bmi_chart::class.java)
-
                 //Toast.makeText(this," BMI Chart", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
                 return true
             }
-            R.id.item3 ->{
+            R.id.exit_app ->{
                 finish()
                 System.exit(0)
                 Toast.makeText(this,"Exit", Toast.LENGTH_SHORT).show()
                 return true
             }
+            R.id.about_bmi ->{
+                //Toast.makeText(this,"About BMI ",Toast.LENGTH_SHORT).show()
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=QIsWHKFTA4M"))
+                startActivity(intent)
+
+            }
+            R.id.dial ->{
+               // Toast.makeText(this,"dial",Toast.LENGTH_SHORT).show()
+                val intent = Intent(Intent.ACTION_DIAL)
+                intent.data = Uri.parse("tel:6387511508")
+                startActivity(intent)
+            }
+//            Calling method
+            R.id.Call ->{
+                //Toast.makeText(this,"call",Toast.LENGTH_SHORT).show()
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) == PERMISSION_GRANTED){
+                    val intent = Intent(Intent.ACTION_CALL)
+                    intent.data = Uri.parse("tel:6387511508")
+                    startActivity(intent)
+                }else{
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CALL_PHONE), 1001)
+                }
+            }
+
+            R.id.email ->{
+                Toast.makeText(this,"email",Toast.LENGTH_SHORT).show()
+            }
 
         }
         return super.onOptionsItemSelected(item)
     }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001){
+            if(grantResults.isNotEmpty() && permissions[0].equals(PackageManager.PERMISSION_GRANTED)){
+
+            }else{
+                Toast.makeText(this, "Please give permission", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    // Calling method end
     override fun onClick(view: View) {
         when (view?.id) {
             R.id.btn_calculate -> {
