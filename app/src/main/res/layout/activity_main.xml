@@ -21,6 +21,7 @@
             android:id="@+id/height"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:editable="false"
             android:layout_margin="5dp"
             android:hint="hight in cm"
             android:inputType="numberDecimal"

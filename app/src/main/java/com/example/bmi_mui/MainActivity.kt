@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -79,20 +78,43 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            Calling method
             R.id.Call ->{
                 //Toast.makeText(this,"call",Toast.LENGTH_SHORT).show()
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) == PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CALL_PHONE
+                    ) == PERMISSION_GRANTED
+                ) {
                     val intent = Intent(Intent.ACTION_CALL)
                     intent.data = Uri.parse("tel:6387511508")
                     startActivity(intent)
-                }else{
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CALL_PHONE), 1001)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.CALL_PHONE),
+                        1001
+                    )
                 }
             }
 
-            R.id.email ->{
-                Toast.makeText(this,"email",Toast.LENGTH_SHORT).show()
+            R.id.email -> {
+
+
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:") // only email apps should handle this
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("siddhantpatel445@gmail.com"))
+                    putExtra(Intent.EXTRA_SUBJECT, "I hope you enjoy your Android development journey ")
+
+                }
+                startActivity(intent)
+//                    if (intent.resolveActivity(packageManager) != null) {
+//                        startActivity(intent)
+//                    }else{
+//                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
+//                    }
             }
 
         }
+
+
         return super.onOptionsItemSelected(item)
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -107,11 +129,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+
     // Calling method end
     override fun onClick(view: View) {
         when (view?.id) {
             R.id.btn_calculate -> {
-
                 if (binding.height.text!!.isEmpty() && binding.weight.text!!.isEmpty()) {
                     binding.height.requestFocus()
                     Toast.makeText(this, "Enter the height & Weight", Toast.LENGTH_SHORT).show()
@@ -128,6 +150,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 if (isClear) {
+                    binding.height.isEnabled = true
+                    binding.weight.isEnabled = true
                     isClear = false
                     binding.btnCalculate.text = "Calculate"
                     binding.BMIResult.setText("")
@@ -140,15 +164,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     //Toast.makeText(this@MainActivity, "hello", Toast.LENGTH_LONG).show()
 
                     // Check if the height EditText and Weight EditText are not empty
+
                     if (binding.height.text.toString()
                             .isNotEmpty() && binding.weight.text.toString().isNotEmpty()
                     ) {
                         if (!isClear) {
                             // initialize the variable
                             isClear = true
+
                             binding.btnCalculate.setText("Clear")
+
                             val height = (binding.height.text.toString()).toDouble()
                             val weight = (binding.weight.text.toString()).toDouble()
+                            binding.height.isEnabled = false
+                            binding.weight.isEnabled = false
 
                             if (height == 0.0 || weight == 0.0) {
                                 Toast.makeText(
@@ -158,6 +187,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 ).show()
 
                             } else {
+
                                 val Height_in_metre = height.toFloat() / 100
                                 val total = weight.toFloat() / (Height_in_metre * Height_in_metre)
                                 val BMI = (total * 100).roundToInt() / 100.0
