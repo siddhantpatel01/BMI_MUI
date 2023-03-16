@@ -26,7 +26,7 @@ class what_is_BMI : AppCompatActivity() {
             binding.progressBar.visibility = View.GONE
         }
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            Log.d("TAG", "shouldOverrideUrlLoading: "+request?.url)
+           // Log.d("TAG", "shouldOverrideUrlLoading: "+request?.url)
             return super.shouldOverrideUrlLoading(view, request)
 
         }
