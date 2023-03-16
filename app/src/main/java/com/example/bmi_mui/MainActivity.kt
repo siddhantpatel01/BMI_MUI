@@ -1,5 +1,6 @@
 package com.example.bmi_mui
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -9,18 +10,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import com.example.bmi_mui.databinding.ActivityMainBinding
+
 import kotlin.math.roundToInt
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private var isClear: Boolean = false
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnCalculate.setOnClickListener(this)
+        onBackPressedDispatcher.addCallback(this, callback)
+        callback.isEnabled = true
         if (isClear) {
             isClear = false
             binding.btnCalculate.setText("CALCULATE")
@@ -35,8 +40,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    private var callback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            var alertDialog = AlertDialog.Builder(this@MainActivity)
+            alertDialog.setTitle(resources.getString(R.string.app_name))
+            alertDialog.setMessage("Are you sure to exit ?")
+            alertDialog.setCancelable(false)
+            alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
+                override fun onClick(di: DialogInterface?, p1: Int) {
+                    finish()
+                }
+
+            })
+            alertDialog.setNegativeButton("No", object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+
+                }
+
+            })
+            alertDialog.show()
+
+        }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
             menuInflater.inflate(R.menu.options_menu, menu)
+
             MenuCompat.setGroupDividerEnabled(menu!!, true);//add horizontal divider
             return super.onCreateOptionsMenu(menu)
 
@@ -57,16 +87,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
                 return true
             }
-            R.id.exit_app ->{
-                finish()
-                System.exit(0)
-                Toast.makeText(this,"Exit", Toast.LENGTH_SHORT).show()
-                return true
-            }
+
             R.id.about_bmi ->{
                 //Toast.makeText(this,"About BMI ",Toast.LENGTH_SHORT).show()
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=QIsWHKFTA4M"))
+//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=QIsWHKFTA4M"))
+//                startActivity(intent)
+                val intent = Intent(this, what_is_BMI::class.java)
+                //Toast.makeText(this," BMI Chart", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
+                return true
 
             }
             R.id.dial ->{
@@ -98,10 +127,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.email -> {
 
 
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:") // only email apps should handle this
                     putExtra(Intent.EXTRA_EMAIL, arrayOf("siddhantpatel445@gmail.com"))
-                    putExtra(Intent.EXTRA_SUBJECT, "I hope you enjoy your Android development journey ")
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        "I hope you enjoy your Android development journey "
+                    )
 
                 }
                 startActivity(intent)
@@ -111,7 +143,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
 //                    }
             }
-
         }
 
 
@@ -237,7 +268,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             }
 
+
         }
+
+
     }
 
     override fun onResume() {
@@ -245,7 +279,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
+//    @Deprecated("Deprecated in Java")
+//    override fun onBackPressed() {
+//        val alertDialog = AlertDialog.Builder(this)
+//        alertDialog.setTitle(resources.getString(R.string.app_name))
+//        alertDialog.setMessage("Are you sure to exit ?")
+//        alertDialog.setCancelable(false)
+//        alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
+//            override fun onClick(di: DialogInterface?, p1: Int) {
+//                finish()
+//            }
+//
+//        })
+//
+//        alertDialog.setNegativeButton("No", object : DialogInterface.OnClickListener {
+//            override fun onClick(p0: DialogInterface?, p1: Int) {
+//
+//            }
+//
+//        })
+//
+//        alertDialog.show()
+//
+//        super.onBackPressed()
+//    }
+
+
 }
+
 
 
 
