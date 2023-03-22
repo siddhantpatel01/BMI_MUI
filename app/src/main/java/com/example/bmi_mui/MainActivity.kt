@@ -147,6 +147,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
 //                    }
             }
+            R.id.rate_me ->{
+                binding.rateus.visibility = View.VISIBLE
+                binding.rateus.setOnRatingBarChangeListener {  ratingBar, rating, fromUser ->
+                    Toast.makeText(this," Rated $rating",Toast.LENGTH_SHORT).show()
+                    binding.rateus.visibility = View.GONE
+                }
+            }
+
         }
 
 

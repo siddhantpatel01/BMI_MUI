@@ -19,6 +19,11 @@
             android:id="@+id/bmi_chart"
             android:title="BMI Chart" />
     </group>
+    <group android:id="@+id/rate">
+        <item
+            android:id="@+id/rate_me"
+            android:title="Rate Us" />
+    </group>
 
     <group android:id="@+id/contact">
         <item
