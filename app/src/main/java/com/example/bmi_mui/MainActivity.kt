@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
+import androidx.databinding.DataBindingUtil
 import com.example.bmi_mui.databinding.ActivityMainBinding
 
 import kotlin.math.roundToInt
@@ -25,13 +26,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private var isClear: Boolean = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+      //  binding = ActivityMainBinding.inflate(layoutInflater)
+      //  setContentView(binding.root)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_main);
         binding.btnCalculate.setOnClickListener(this)
         onBackPressedDispatcher.addCallback(this, callback)
+        binding.heights = "height cm"
+        binding.weights = "weight in kgs"
         callback.isEnabled = true
         if (isClear) {
             isClear = false
