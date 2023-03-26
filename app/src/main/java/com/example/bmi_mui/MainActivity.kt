@@ -1,8 +1,7 @@
 package com.example.bmi_mui
 
-import android.content.DialogInterface
+import Factory.ViewModelFactory
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.os.Bundle
@@ -17,50 +16,54 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.bmi_mui.databinding.ActivityMainBinding
-
-import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     private var isClear: Boolean = false
+    lateinit var viewModel: BmiViewModel
+    lateinit var factory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  binding = ActivityMainBinding.inflate(layoutInflater)
-      //  setContentView(binding.root)
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        //  binding = ActivityMainBinding.inflate(layoutInflater)
+        //  setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.btnCalculate.setOnClickListener(this)
         onBackPressedDispatcher.addCallback(this, callback)
         binding.heights = "height cm"
         binding.weights = "weight in kgs"
+
+        binding.lifecycleOwner = this
+        factory = ViewModelFactory(0.0)
+        viewModel = ViewModelProvider(this, factory)[BmiViewModel::class.java]
+
+        binding.myviewmodel = viewModel
+
+
         callback.isEnabled = true
         if (isClear) {
             isClear = false
-            binding.btnCalculate.setText("CALCULATE")
+            binding.btnCalculate.text = "CALCULATE"
 
         }
     }
 
     private var callback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            var alertDialog = AlertDialog.Builder(this@MainActivity)
+            val alertDialog = AlertDialog.Builder(this@MainActivity)
             alertDialog.setTitle(resources.getString(R.string.app_name))
             alertDialog.setMessage("Are you sure to exit ?")
             alertDialog.setCancelable(false)
-            alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
-                override fun onClick(di: DialogInterface?, p1: Int) {
-                    finish()
-                }
-
-            })
-            alertDialog.setNegativeButton("No", object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-
-                }
-
-            })
+            alertDialog.setPositiveButton(
+                "Yes"
+            ) { di, p1 -> finish() }
+            alertDialog.setNegativeButton(
+                "No"
+            ) { p0, p1 -> }
             alertDialog.show()
 
         }
@@ -68,30 +71,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.options_menu, menu)
+        menuInflater.inflate(R.menu.options_menu, menu)
 
-            MenuCompat.setGroupDividerEnabled(menu!!, true);//add horizontal divider
-            return super.onCreateOptionsMenu(menu)
+        MenuCompat.setGroupDividerEnabled(menu!!, true)//add horizontal divider
+        return super.onCreateOptionsMenu(menu)
 
-        }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.about_developer ->{
+        when (item.itemId) {
+            R.id.about_developer -> {
 
-                val intent = Intent(this,Aboutdeveloper::class.java)
+                val intent = Intent(this, Aboutdeveloper::class.java)
                 startActivity(intent)
 //                Toast.makeText(this,"About BMI", Toast.LENGTH_SHORT).show()
                 return true
             }
-            R.id.bmi_chart ->{
+            R.id.bmi_chart -> {
                 val intent = Intent(this, bmi_chart::class.java)
                 //Toast.makeText(this," BMI Chart", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
                 return true
             }
 
-            R.id.about_bmi ->{
+            R.id.about_bmi -> {
                 //Toast.makeText(this,"About BMI ",Toast.LENGTH_SHORT).show()
 //                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=QIsWHKFTA4M"))
 //                startActivity(intent)
@@ -101,15 +104,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 return true
 
             }
-            R.id.dial ->{
-               // Toast.makeText(this,"dial",Toast.LENGTH_SHORT).show()
+            R.id.dial -> {
+                // Toast.makeText(this,"dial",Toast.LENGTH_SHORT).show()
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse("tel:6387511508")
                 startActivity(intent)
 
             }
 //            Calling method
-            R.id.Call ->{
+            R.id.Call -> {
                 //Toast.makeText(this,"call",Toast.LENGTH_SHORT).show()
                 if (ContextCompat.checkSelfPermission(
                         this,
@@ -131,7 +134,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.email -> {
 
-                val intent =Intent(Intent.ACTION_SENDTO).apply {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:") // only email apps should handle this
                     putExtra(Intent.EXTRA_EMAIL, arrayOf("siddhantpatel445@gmail.com"))
                     putExtra(
@@ -141,16 +144,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
                 startActivity(intent)
-//                    if (intent.resolveActivity(packageManager) != null) {
-//                        startActivity(intent)
-//                    }else{
-//                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
-//                    }
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
+                    }
             }
-            R.id.rate_me ->{
+            R.id.rate_me -> {
                 binding.rateus.visibility = View.VISIBLE
-                binding.rateus.setOnRatingBarChangeListener {  ratingBar, rating, fromUser ->
-                    Toast.makeText(this," Rated $rating",Toast.LENGTH_SHORT).show()
+                binding.rateus.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+                    Toast.makeText(this, " Rated $rating", Toast.LENGTH_SHORT).show()
                     binding.rateus.visibility = View.GONE
                 }
             }
@@ -160,12 +163,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         return super.onOptionsItemSelected(item)
     }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1001){
-            if(grantResults.isNotEmpty() && permissions[0].equals(PackageManager.PERMISSION_GRANTED)){
 
-            }else{
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() && permissions[0].equals(PERMISSION_GRANTED)) {
+
+            } else {
                 Toast.makeText(this, "Please give permission", Toast.LENGTH_SHORT).show()
             }
 
@@ -175,7 +183,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // Calling method end
     override fun onClick(view: View) {
-        when (view?.id) {
+        when (view.id) {
             R.id.btn_calculate -> {
                 if (binding.height.text!!.isEmpty() && binding.weight.text!!.isEmpty()) {
                     binding.height.requestFocus()
@@ -198,7 +206,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     isClear = false
                     binding.btnCalculate.text = "Calculate"
                     binding.BMIResult.setText("")
-
+                    binding.healthStatus.setText("")
                     binding.weight.text!!.clear()
                     binding.height.text!!.clear()
                     Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show()
@@ -215,7 +223,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             // initialize the variable
                             isClear = true
 
-                            binding.btnCalculate.setText("Clear")
+                            binding.btnCalculate.text = "Clear"
 
                             val height = (binding.height.text.toString()).toDouble()
                             val weight = (binding.weight.text.toString()).toDouble()
@@ -231,44 +239,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                             } else {
 
-                                val Height_in_metre = height.toFloat() / 100
-                                val total = weight.toFloat() / (Height_in_metre * Height_in_metre)
-                                val BMI = (total * 100).roundToInt() / 100.0
+
+                                viewModel.BMI.observe(this, Observer {
+                                    binding.BMIResult.text = it.toString()
+                                })
+                                viewModel.healthStatus.observe(this, Observer {
+                                    binding.healthStatus.text = it.toString()
+                                })
+
+                                viewModel.caculateBmi(
+                                    binding.height.text.toString().toDouble(),
+                                    binding.weight.text.toString().toDouble(),
+
+                                    )
 
 
-
-
-
-                               // binding.BMIResult.text = "Your BMI is :-  ${BMI} "
-                                // update the status text as per the bmi conditions
-                                if (BMI < 18.5) {
-                                    binding.BMIResult.text= " Your BMI is :- $BMI \n Health Status:- You are Under Weight"
-                                    // Toast.makeText(this@MainActivity, R.string.under_weight, Toast.LENGTH_LONG).show()
-
-
-
-
-                                } else if (BMI >= 18.5 && BMI < 24.9) {
-
-                                    binding.BMIResult.text= " Your BMI is :- $BMI \n Health Status :- You are Healthy"
-                                    //
-                                    // Toast.makeText(this@MainActivity, R.string.Healthy, Toast.LENGTH_LONG).show()
-
-
-                                } else if (BMI >= 24.9 && BMI < 30) {
-                                    binding.BMIResult.text= " Your BMI is :- $BMI \n Health Status:-Your are Over Weight"
-                                    //
-
-                                    // Toast.makeText(this@MainActivity, R.string.over_weight, Toast.LENGTH_LONG).show()
-
-
-                                } else {
-                                    binding.BMIResult.text= " Your BMI is :- $BMI \n Health Status :- Suffering from Obesity"
-                                    //
-                                    //Toast.makeText(this@MainActivity, R.string.Suffering_from_Obesity, Toast.LENGTH_LONG).show()
-
-
-                                }
                             }
                         }
 
@@ -286,41 +271,4 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-
-//    @Deprecated("Deprecated in Java")
-//    override fun onBackPressed() {
-//        val alertDialog = AlertDialog.Builder(this)
-//        alertDialog.setTitle(resources.getString(R.string.app_name))
-//        alertDialog.setMessage("Are you sure to exit ?")
-//        alertDialog.setCancelable(false)
-//        alertDialog.setPositiveButton("Yes", object : DialogInterface.OnClickListener {
-//            override fun onClick(di: DialogInterface?, p1: Int) {
-//                finish()
-//            }
-//
-//        })
-//
-//        alertDialog.setNegativeButton("No", object : DialogInterface.OnClickListener {
-//            override fun onClick(p0: DialogInterface?, p1: Int) {
-//
-//            }
-//
-//        })
-//
-//        alertDialog.show()
-//
-//        super.onBackPressed()
-//    }
-
-
 }
-
-
-
-
-
-

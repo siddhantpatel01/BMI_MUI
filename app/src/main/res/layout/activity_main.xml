@@ -1,114 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="myviewmodel"
+            type="com.example.bmi_mui.BmiViewModel" />
+
         <variable
             name="heights"
             type="String" />
+
         <variable
             name="weights"
             type="String" />
     </data>
 
-    <RelativeLayout
 
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_dynamic_neutral_variant100"
-        tools:context=".MainActivity">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/height_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@{heights}"
-            android:gravity="center"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
+        <RelativeLayout
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/height"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:layout_margin="5dp"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@{weights}"
-            android:layout_toRightOf="@+id/height_layout"
-            android:gravity="center"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/BMI_Result"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:layout_below="@+id/height_layout"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/blue_border_rounded_cornwe2">
+            android:layout_height="match_parent"
+            android:background="@color/material_dynamic_neutral_variant100"
+            tools:context=".MainActivity">
 
-
-        </com.google.android.material.textview.MaterialTextView>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/BMI_Result"
-            android:layout_margin="40dp"
-            android:layout_marginTop="50dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:id="@+id/btn_calculate"
-                android:layout_height="60dp"
-                android:text="CALCULATE"
-                app:cornerRadius="100dp">
-
-
-            </com.google.android.material.button.MaterialButton>
-
-            <RatingBar
-                android:layout_marginTop="10dp"
-                android:id="@+id/rateus"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:theme="@style/RatingBar"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/height_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="185dp"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:visibility="gone"
+                android:layout_marginTop="20dp"
+
+                android:gravity="center"
+                android:hint="@{heights}"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:editable="false"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/height_layout"
+                android:gravity="center"
+                android:hint="@{weights}"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/BMI_Result_layout"
+                android:layout_below="@+id/height_layout"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/blue_border_rounded_cornwe2"
+                android:layout_marginTop="20dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/BMI_Result"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:text=""
 
 
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                >
+<!--
+                    android:text="@{String.valueOf(myviewmodel.BMI)}"
+-->
 
 
-    </RelativeLayout>
+
+
+
+                    <!--                android:text="@{String.valueOf(myviewmodel.BMI)}"-->
+
+                </com.google.android.material.textview.MaterialTextView>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/health_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text=""
+                    android:gravity="center"
+                    android:textSize="15sp"
+
+                    >
+                   <!-- android:text="@{String.valueOf(myviewmodel.healthStatus)}"
+-->
+
+
+
+                    <!--                android:text="@{String.valueOf(myviewmodel.BMI)}"-->
+
+                </com.google.android.material.textview.MaterialTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/BMI_Result_layout"
+                android:layout_margin="40dp"
+                android:layout_marginTop="50dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_calculate"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="CALCULATE"
+                    app:cornerRadius="100dp">
+
+
+                </com.google.android.material.button.MaterialButton>
+
+                <RatingBar
+                    android:id="@+id/rateus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:numStars="5"
+                    android:theme="@style/RatingBar"
+                    android:visibility="gone"
+
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
 </layout>
