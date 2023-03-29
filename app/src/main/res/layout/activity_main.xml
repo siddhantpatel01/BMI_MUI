@@ -10,13 +10,7 @@
             name="myviewmodel"
             type="com.example.bmi_mui.BmiViewModel" />
 
-        <variable
-            name="heights"
-            type="String" />
 
-        <variable
-            name="weights"
-            type="String" />
     </data>
 
 
@@ -39,7 +33,7 @@
                 android:layout_marginTop="20dp"
 
                 android:gravity="center"
-                android:hint="@{heights}"
+
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -47,10 +41,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:text="@={myviewmodel.baseObservable.height}"
                     android:editable="false"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
+
+<!--            android:text="@{String.valueOf(myviewmodel.baseObservable.height)}"-->
 
             <com.google.android.material.textfield.TextInputLayout
 
@@ -60,7 +57,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_toRightOf="@+id/height_layout"
                 android:gravity="center"
-                android:hint="@{weights}"
+
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-
+                    android:text="@={myviewmodel.baseObservable.weight}"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>

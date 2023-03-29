@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.btnCalculate.setOnClickListener(this)
         onBackPressedDispatcher.addCallback(this, callback)
-        binding.heights = "height cm"
-        binding.weights = "weight in kgs"
 
         binding.lifecycleOwner = this
         factory = ViewModelFactory(0.0)
@@ -144,11 +142,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
                 startActivity(intent)
-                    if (intent.resolveActivity(packageManager) != null) {
-                        startActivity(intent)
-                    }else{
-                        Toast.makeText(this,"not app found",Toast.LENGTH_SHORT).show()
-                    }
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "not app found", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.rate_me -> {
                 binding.rateus.visibility = View.VISIBLE
@@ -185,20 +183,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.btn_calculate -> {
-                if (binding.height.text!!.isEmpty() && binding.weight.text!!.isEmpty()) {
-                    binding.height.requestFocus()
-                    Toast.makeText(this, "Enter the height & Weight", Toast.LENGTH_SHORT).show()
-                } else if (binding.weight.text!!.isEmpty()) {
-                    binding.weight.requestFocus()
-                    Toast.makeText(this, "Enter the weight", Toast.LENGTH_SHORT).show()
-                } else if (binding.height.text!!.isEmpty()) {
-                    binding.height.requestFocus()
-                    Toast.makeText(
-                        this@MainActivity,
-                        "please enter height  ",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+//                if (binding.height.text!!.isEmpty() && binding.weight.text!!.isEmpty()) {
+//                    binding.height.requestFocus()
+//                    Toast.makeText(this, "Enter the height & Weight", Toast.LENGTH_SHORT).show()
+//                } else if (binding.weight.text!!.isEmpty()) {
+//                    binding.weight.requestFocus()
+//                    Toast.makeText(this, "Enter the weight", Toast.LENGTH_SHORT).show()
+//                } else if (binding.height.text!!.isEmpty()) {
+//                    binding.height.requestFocus()
+//                    Toast.makeText(
+//                        this@MainActivity,
+//                        "please enter height  ",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
 
                 if (isClear) {
                     binding.height.isEnabled = true
@@ -216,9 +214,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     // Check if the height EditText and Weight EditText are not empty
 
-                    if (binding.height.text.toString()
-                            .isNotEmpty() && binding.weight.text.toString().isNotEmpty()
-                    ) {
+                    if (binding.height.text.toString().isNotEmpty() && binding.weight.text.toString().isNotEmpty())
+                    {
                         if (!isClear) {
                             // initialize the variable
                             isClear = true
@@ -240,6 +237,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             } else {
 
 
+                                viewModel.errormessage.observe(this , Observer{
+                                    Toast.makeText(this , it, Toast.LENGTH_SHORT).show()
+                                })
                                 viewModel.BMI.observe(this, Observer {
                                     binding.BMIResult.text = it.toString()
                                 })
@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                     binding.healthStatus.text = it.toString()
                                 })
 
-                                viewModel.caculateBmi(
+                                viewModel.validate(
                                     binding.height.text.toString().toDouble(),
                                     binding.weight.text.toString().toDouble(),
 
