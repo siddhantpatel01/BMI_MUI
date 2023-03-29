@@ -8,7 +8,7 @@ import androidx.databinding.library.baseAdapters.BR
 class Observable : BaseObservable() {
     @get:Bindable
 
-    var height: String=  " "
+    var height: String=  ""
         set(value) {
             field = value
             notifyPropertyChanged(BR.height)

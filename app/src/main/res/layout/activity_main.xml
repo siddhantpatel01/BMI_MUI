@@ -8,7 +8,8 @@
 
         <variable
             name="myviewmodel"
-            type="com.example.bmi_mui.BmiViewModel" />
+            type="com.example.bmi_mui.BmiViewModel" >
+        </variable>
 
 
     </data>
@@ -25,15 +26,15 @@
             android:background="@color/material_dynamic_neutral_variant100"
             tools:context=".MainActivity">
 
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/height_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-
+                android:hint="height"
                 android:gravity="center"
-
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -47,7 +48,6 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            android:text="@{String.valueOf(myviewmodel.baseObservable.height)}"-->
 
             <com.google.android.material.textfield.TextInputLayout
 
@@ -56,8 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_toRightOf="@+id/height_layout"
+                android:hint="weight"
                 android:gravity="center"
-
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -69,6 +69,11 @@
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

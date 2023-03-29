@@ -1,6 +1,5 @@
 package com.example.bmi_mui
 
-import Factory.ViewModelFactory
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
@@ -21,25 +20,66 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.bmi_mui.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var isClear: Boolean = false
     lateinit var viewModel: BmiViewModel
-    lateinit var factory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //  binding = ActivityMainBinding.inflate(layoutInflater)
-        //  setContentView(binding.root)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.btnCalculate.setOnClickListener(this)
+        binding.btnCalculate.setOnClickListener {
+
+            if (isClear) {
+                binding.height.isEnabled = true
+                binding.weight.isEnabled = true
+                isClear = false
+                binding.btnCalculate.text = "Calculate"
+                binding.BMIResult.setText("")
+                binding.healthStatus.setText("")
+                binding.weight.text!!.clear()
+                binding.height.text!!.clear()
+                Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show()
+            } else {
+                if (binding.height.text.toString().isNotEmpty() && binding.weight.text.toString().isNotEmpty()) {
+                    if (!isClear) {
+                        // initialize the variable
+                        isClear = true
+                        binding.btnCalculate.text = "Clear"
+                        binding.height.isEnabled = false
+                        binding.weight.isEnabled = false
+                    }
+
+                }
+                viewModel.validate()
+
+
+            }
+
+
+        }
+
         onBackPressedDispatcher.addCallback(this, callback)
 
+
+        viewModel = ViewModelProvider(this)[BmiViewModel::class.java]
         binding.lifecycleOwner = this
-        factory = ViewModelFactory(0.0)
-        viewModel = ViewModelProvider(this, factory)[BmiViewModel::class.java]
 
         binding.myviewmodel = viewModel
+
+
+
+        viewModel.errormessage.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+        viewModel.BMI.observe(this, Observer {
+            binding.BMIResult.text = it.toString()
+        })
+        viewModel.healthStatus.observe(this, Observer {
+            binding.healthStatus.text = it.toString()
+        })
+
 
 
         callback.isEnabled = true
@@ -179,96 +219,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    // Calling method end
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_calculate -> {
-//                if (binding.height.text!!.isEmpty() && binding.weight.text!!.isEmpty()) {
-//                    binding.height.requestFocus()
-//                    Toast.makeText(this, "Enter the height & Weight", Toast.LENGTH_SHORT).show()
-//                } else if (binding.weight.text!!.isEmpty()) {
-//                    binding.weight.requestFocus()
-//                    Toast.makeText(this, "Enter the weight", Toast.LENGTH_SHORT).show()
-//                } else if (binding.height.text!!.isEmpty()) {
-//                    binding.height.requestFocus()
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        "please enter height  ",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-
-                if (isClear) {
-                    binding.height.isEnabled = true
-                    binding.weight.isEnabled = true
-                    isClear = false
-                    binding.btnCalculate.text = "Calculate"
-                    binding.BMIResult.setText("")
-                    binding.healthStatus.setText("")
-                    binding.weight.text!!.clear()
-                    binding.height.text!!.clear()
-                    Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show()
-                } else {
-
-                    //Toast.makeText(this@MainActivity, "hello", Toast.LENGTH_LONG).show()
-
-                    // Check if the height EditText and Weight EditText are not empty
-
-                    if (binding.height.text.toString().isNotEmpty() && binding.weight.text.toString().isNotEmpty())
-                    {
-                        if (!isClear) {
-                            // initialize the variable
-                            isClear = true
-
-                            binding.btnCalculate.text = "Clear"
-
-                            val height = (binding.height.text.toString()).toDouble()
-                            val weight = (binding.weight.text.toString()).toDouble()
-                            binding.height.isEnabled = false
-                            binding.weight.isEnabled = false
-
-                            if (height == 0.0 || weight == 0.0) {
-                                Toast.makeText(
-                                    this,
-                                    "Invalid height or weight ",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                            } else {
-
-
-                                viewModel.errormessage.observe(this , Observer{
-                                    Toast.makeText(this , it, Toast.LENGTH_SHORT).show()
-                                })
-                                viewModel.BMI.observe(this, Observer {
-                                    binding.BMIResult.text = it.toString()
-                                })
-                                viewModel.healthStatus.observe(this, Observer {
-                                    binding.healthStatus.text = it.toString()
-                                })
-
-                                viewModel.validate(
-                                    binding.height.text.toString().toDouble(),
-                                    binding.weight.text.toString().toDouble(),
-
-                                    )
-
-
-                            }
-                        }
-
-                    }
-
-
-                }
-
-
-            }
-
-
-        }
-
-
-    }
-
+    //Calling method end
 }
